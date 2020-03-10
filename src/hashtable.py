@@ -56,6 +56,7 @@ class HashTable:
         index = self._hash_mod(key)
         
         if self.storage[index] is not None:
+            print(f'WARNING: index: {index} already exists in storage')
             new_item = LinkedPair(key, value)
             new_item.next = self.storage[index]
             self.storage[index] = new_item  
@@ -72,7 +73,15 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        index = self._hash_mod(key)
+        print(index, 'FROM REMOVE')
+        if self.storage[index]:
+            self.storage[index] = None
+        # elif self.storage[index].next is not None:
+        #     self.storage[index] = self.storage[index].next
+        else:
+            return f'WARNING: index: {index} does not exist in storage'
+            
 
 
     def retrieve(self, key):
@@ -84,11 +93,30 @@ class HashTable:
         Fill this in.
         '''
         index = self._hash_mod(key)
-        if self.storage[index] is not None:
-            return(self.storage[index].value)
-        else: 
-            return None
+        
+        # if self.storage[index] is not None:
+        #     if self.storage[index].next is not None:
+        #         if self.storage[index].next.key == key:
+        #             return self.storage[index].next.key, self.storage[index].next.value
+        #         else:
+        #             return self.storage[index].key, self.storage[index].value
+        #     else:
+        #         return self.storage[index].key, self.storage[index].value
 
+        # ATTEMPT WITH WHILE LOOP BELOW        
+        if self.storage[index] is not None:
+            
+            if self.storage[index].key != key:
+                cur = self.storage[index].next
+                while cur is not None:
+                    if cur.key == key:
+                        return cur.key, cur.value
+                    else:
+                        cur = cur.next
+            elif self.storage[index].key == key:
+                return self.storage[index].key, self.storage[index].value
+        else:
+            return None
 
     def resize(self):
         '''
@@ -97,7 +125,13 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+         
+        i = 0
+        self.capacity *= 2
+        new_storage = [None] * self.capacity
+        for i in range(len(self.storage)):
+            new_storage[i] = self.storage[i]
+        self.storage = new_storage
 
 
 
