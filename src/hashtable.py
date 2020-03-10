@@ -56,7 +56,6 @@ class HashTable:
         index = self._hash_mod(key)
         
         if self.storage[index] is not None:
-            # print(f'WARNING: index: {index} already exists in storage')
             new_item = LinkedPair(key, value)
             new_item.next = self.storage[index]
             self.storage[index] = new_item  
@@ -74,13 +73,14 @@ class HashTable:
         Fill this in.
         '''
         index = self._hash_mod(key)
-        
-        if self.storage[index]:
-            self.storage[index] = None
-        # elif self.storage[index].next is not None:
-        #     self.storage[index] = self.storage[index].next
-        else:
+        if self.storage[index] is None:
             return f'WARNING: index: {index} does not exist in storage'
+        elif self.storage[index].next is not None:
+            self.storage[index] = self.storage[index].next
+        else:
+            self.storage[index] = None
+        
+            
             
 
 
@@ -93,17 +93,7 @@ class HashTable:
         Fill this in.
         '''
         index = self._hash_mod(key)
-        
-        # if self.storage[index] is not None:
-        #     if self.storage[index].next is not None:
-        #         if self.storage[index].next.key == key:
-        #             return self.storage[index].next.key, self.storage[index].next.value
-        #         else:
-        #             return self.storage[index].key, self.storage[index].value
-        #     else:
-        #         return self.storage[index].key, self.storage[index].value
-
-        # ATTEMPT WITH WHILE LOOP BELOW        
+         
         if self.storage[index] is not None:
             
             if self.storage[index].key != key:
@@ -150,7 +140,6 @@ class HashTable:
                         new_storage[index] = new_item
                     else:
                         new_storage[index] = cur
-           
         self.storage = new_storage
         
 
