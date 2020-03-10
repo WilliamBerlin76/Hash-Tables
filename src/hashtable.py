@@ -83,7 +83,6 @@ class HashTable:
             
             
 
-
     def retrieve(self, key):
         '''
         Retrieve the value stored with the given key.
@@ -115,34 +114,20 @@ class HashTable:
 
         Fill this in.
         '''
-        i = 0
+        old_storage = self.storage
         self.capacity *= 2
-        new_storage = [None] * self.capacity
-        for i in range(0, len(self.storage)):
-            if self.storage[i] is not None:
-                cur = self.storage[i]
+        self.storage = [None] * self.capacity
+        for i in range(len(old_storage)):
+            cur = old_storage[i]
+            if cur is not None:
                 if cur.next is not None:
                     while cur is not None:
-                        index = self._hash_mod(cur.key)
-                        if new_storage[index] is not None:
-                            new_item = LinkedPair(cur.key, cur.value)
-                            new_item.next = new_storage[index]
-                            new_storage[index] = new_item
-                            cur = cur.next
-                        else: 
-                            new_storage[index] = cur
-                            cur = cur.next
+                        self.insert(cur.key, cur.value)
+                        cur = cur.next
                 else:
-                    index = self._hash_mod(cur.key)
-                    if new_storage[index] is not None:
-                        new_item = LinkedPair(cur.key, cur.value)
-                        new_item.next = new_storage[index]
-                        new_storage[index] = new_item
-                    else:
-                        new_storage[index] = cur
-        self.storage = new_storage
+                    self.insert(cur.key, cur.value)
         
-
+        
 
 if __name__ == "__main__":
     ht = HashTable(2)
