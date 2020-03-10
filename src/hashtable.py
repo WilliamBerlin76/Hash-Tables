@@ -31,8 +31,17 @@ class HashTable:
         Hash an arbitrary key using DJB2 hash
 
         OPTIONAL STRETCH: Research and implement DJB2
+
+        according to http://www.cse.yorku.ca/~oz/hash.html
+            the use of integer 33 has not been adequately explained
         '''
-        pass
+        hash_val = 5381
+        for x in key:
+            hash_val = hash_val * 33 + ord(x)
+            # or
+            # hash_val = ((hash_val << 5) + hash_val) + ord(x)
+        return hash_val
+        
 
 
     def _hash_mod(self, key):
@@ -40,7 +49,7 @@ class HashTable:
         Take an arbitrary key and return a valid integer index
         within the storage capacity of the hash table.
         '''
-        return self._hash(key) % self.capacity
+        return self._hash_djb2(key) % self.capacity
 
 
     def insert(self, key, value):
