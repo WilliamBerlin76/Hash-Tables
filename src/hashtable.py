@@ -56,7 +56,7 @@ class HashTable:
         index = self._hash_mod(key)
         
         if self.storage[index] is not None:
-            print(f'WARNING: index: {index} already exists in storage')
+            # print(f'WARNING: index: {index} already exists in storage')
             new_item = LinkedPair(key, value)
             new_item.next = self.storage[index]
             self.storage[index] = new_item  
@@ -74,7 +74,7 @@ class HashTable:
         Fill this in.
         '''
         index = self._hash_mod(key)
-        print(index, 'FROM REMOVE')
+        
         if self.storage[index]:
             self.storage[index] = None
         # elif self.storage[index].next is not None:
@@ -110,11 +110,11 @@ class HashTable:
                 cur = self.storage[index].next
                 while cur is not None:
                     if cur.key == key:
-                        return cur.key, cur.value
+                        return cur.value
                     else:
                         cur = cur.next
             elif self.storage[index].key == key:
-                return self.storage[index].key, self.storage[index].value
+                return self.storage[index].value
         else:
             return None
 
@@ -125,14 +125,34 @@ class HashTable:
 
         Fill this in.
         '''
-         
         i = 0
         self.capacity *= 2
         new_storage = [None] * self.capacity
-        for i in range(len(self.storage)):
-            new_storage[i] = self.storage[i]
+        for i in range(0, len(self.storage)):
+            if self.storage[i] is not None:
+                cur = self.storage[i]
+                if cur.next is not None:
+                    while cur is not None:
+                        index = self._hash_mod(cur.key)
+                        if new_storage[index] is not None:
+                            new_item = LinkedPair(cur.key, cur.value)
+                            new_item.next = new_storage[index]
+                            new_storage[index] = new_item
+                            cur = cur.next
+                        else: 
+                            new_storage[index] = cur
+                            cur = cur.next
+                else:
+                    index = self._hash_mod(cur.key)
+                    if new_storage[index] is not None:
+                        new_item = LinkedPair(cur.key, cur.value)
+                        new_item.next = new_storage[index]
+                        new_storage[index] = new_item
+                    else:
+                        new_storage[index] = cur
+           
         self.storage = new_storage
-
+        
 
 
 if __name__ == "__main__":
